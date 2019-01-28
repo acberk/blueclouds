@@ -3,5 +3,13 @@ ul {
   }
 img {
    vertical-align: middle;
-   padding: 0 1vw 1vw 0
+}
+li {
+	margin: 0 1vw 1vw 0;
+}
+li:nth-child(2n) {
+	background-color: rgb(226, 226, 226);
+}
+span {
+	margin-left: 1vw;
 }
