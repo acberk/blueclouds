@@ -1,8 +1,12 @@
+body {
+	font-size: 7vh
+}
 ul {
     list-style-type: none;
   }
 img {
-   vertical-align: middle;
+	vertical-align: middle;
+	height: 7vh;
 }
 li {
 	margin: 0 1vw 1vw 0;
