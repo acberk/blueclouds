@@ -1,6 +1,7 @@
 <html>
 
 <head>
+	<link rel="stylesheet" type="text/css" href="main.css">
 	<script src="http://cdn.date-fns.org/v1.9.0/date_fns.min.js"></script>
 </head>
 
@@ -19,9 +20,11 @@
 		json.properties.periods.forEach(p => {
 			const li = document.createElement('li')
 			const img = document.createElement('img')
+			const span = document.createElement('span')
 			img.src = p.icon
 			li.appendChild(img)
-			li.appendChild(document.createTextNode(`${dateFns.format(p.startTime, 'h a')} - ${p.temperature}`))
+			li.appendChild(span)
+			span.appendChild(document.createTextNode(`${dateFns.format(p.startTime, 'h a')} - ${p.temperature}`))
 			ul.appendChild(li)
 		})
 	}
