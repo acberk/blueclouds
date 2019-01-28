@@ -2,7 +2,6 @@
 
 <head>
 	<link rel="stylesheet" type="text/css" href="main.css">
-	<script src="date_fns.min.js"></script>
 </head>
 
 <body>
@@ -24,11 +23,19 @@
 			img.src = p.icon
 			li.appendChild(img)
 			li.appendChild(span)
-			span.appendChild(document.createTextNode(`${dateFns.format(p.startTime, 'h a')} - ${p.temperature}`))
+			span.appendChild(document.createTextNode(`${formatDate(p.startTime)} - ${p.temperature}`))
 			ul.appendChild(li)
 		})
 	}
 	navigator.geolocation.getCurrentPosition(geoSuccess)
+
+	function formatDate(date) {
+		date = parseInt(/T(\d\d)/.exec(date)[1])
+		if (date === 0) return '12 a'
+		if (date === 12) return '12 p'
+		if (date > 12) return `${date - 12} p`
+		return `${date} a`
+	}
 </script>
 
 </html>
