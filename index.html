@@ -23,7 +23,7 @@
 			img.src = p.icon
 			li.appendChild(img)
 			li.appendChild(span)
-			span.appendChild(document.createTextNode(`${formatDate(p.startTime)} - ${p.temperature}`))
+			span.appendChild(document.createTextNode(`${formatDate(p.startTime)} - ${p.temperature}°`))
 			ul.appendChild(li)
 		})
 	}
