@@ -2,6 +2,8 @@
 
 <head>
 	<link rel="stylesheet" type="text/css" href="main.css">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+
 </head>
 
 <body>
@@ -61,7 +63,7 @@
 		const month = datetime.getMonth() + 1
 		const date = datetime.getDate()
 		return `
-			</ul><ul><li class="sticky" id="test">${day} ${month}/${date}</li>
+			</ul><ul><li class="sticky">${day} ${month}/${date}</li>
 		`
 	}
 
