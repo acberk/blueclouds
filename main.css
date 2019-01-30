@@ -32,9 +32,9 @@ span {
 	margin-top: 50vh;
 }
 .spinner > div {
-	width: 2vh;
-	height: 2vh;
-	background-color: #4e4e4e;
+	width: 1.75vh;
+	height: 1.75vh;
+	background-color: #7e7e7e;
 	margin: 0 .25vw 0 .25vw;
 
 	border-radius: 100%;
