@@ -5,46 +5,95 @@
 </head>
 
 <body>
-	
+
 	<ul id="tempList">
-		<div class="spinner">
-			<div class="bounce1"></div>
-			<div class="bounce2"></div>
-			<div class="bounce3"></div>
-		</div>
+		<li>
+			<div class="spinner">
+				<div class="bounce1"></div>
+				<div class="bounce2"></div>
+				<div class="bounce3"></div>
+			</div>
+		</li>
 	</ul>
 </body>
 <script>
+	const weekdays = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday']
+
 	async function geoSuccess(pos) {
 
-		let html = ``
-		
+
+
 		const { latitude, longitude } = pos.coords
 		const response = await fetch(`https://api.weather.gov/points/${latitude.toFixed(4)},${longitude.toFixed(4)}/forecast/hourly`)
 		const json = await response.json()
+		const hourlyForecast = json.properties.periods
+
+		let html = getWeekdayHtml(hourlyForecast[0].startTime)
 
 		const ul = document.getElementById('tempList')
-		json.properties.periods.forEach(p => {
+		hourlyForecast.forEach(p => {
 			html += `
-				<li>
+				<li class="hourly">
 					<img src="${p.icon}"/>
 					<span>${formatDate(p.startTime)}</span>
-					<span>${p.temperature}°</span> 
+					<span>${p.temperature}°</span>
 				</li>
 			`
 		})
 
 		ul.innerHTML = html
+		sticks();
 	}
 	navigator.geolocation.getCurrentPosition(geoSuccess)
 
 	function formatDate(date) {
 		date = parseInt(/T(\d\d)/.exec(date)[1])
-		if (date === 0) return '12 a'
-		if (date === 12) return '12 p'
-		if (date > 12) return `${date - 12} p`
-		return `${date} a`
+		if (date === 0) return '12a'
+		if (date === 12) return '12p'
+		if (date > 12) return `${date - 12}p`
+		return `${date}a`
 	}
+
+	function getWeekdayHtml(datetime) {
+		datetime = new Date(datetime)
+		const day = weekdays[datetime.getDay()]
+		const month = datetime.getMonth() + 1
+		const date = datetime.getDate()
+		return `
+			<li class="weekday" id="test">${day} ${month}/${date}</li>
+		`
+	}
+
+
+	function sticks () {
+		var h = document.getElementById("test");
+		var stuck = false;
+		var stickPoint = getDistance();
+
+		function getDistance() {
+			var topDist = h.offsetTop;
+			return topDist;
+		}
+
+		window.onscroll = (evt => {
+			h = h || document.getElementById("test")
+			stickPoint = stickPoint || getDistance();
+
+			var distance = getDistance() - window.pageYOffset;
+			var offset = window.pageYOffset;
+			
+			if ((distance <= 0) && !stuck) {
+				h.style.position = 'fixed';
+				h.style.top = '0px';
+				stuck = true;
+			}
+			else if (stuck && (offset <= stickPoint)) {
+				h.style.position = 'static';
+				stuck = false;
+			}
+		})
+	}
+
 </script>
 
 </html>
