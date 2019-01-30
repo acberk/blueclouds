@@ -32,17 +32,18 @@
 
 		const ul = document.getElementById('tempList')
 		hourlyForecast.forEach(p => {
+			const startTime = formatDate(p.startTime)
+			if (startTime === '12a') html += getWeekdayHtml(p.startTime)
 			html += `
 				<li class="hourly">
 					<img src="${p.icon}"/>
-					<span>${formatDate(p.startTime)}</span>
+					<span>${startTime}</span>
 					<span>${p.temperature}°</span>
 				</li>
 			`
 		})
 
 		ul.innerHTML = html
-		sticks();
 	}
 	navigator.geolocation.getCurrentPosition(geoSuccess)
 
@@ -60,38 +61,8 @@
 		const month = datetime.getMonth() + 1
 		const date = datetime.getDate()
 		return `
-			<li class="weekday" id="test">${day} ${month}/${date}</li>
+			</ul><ul><li class="sticky" id="test">${day} ${month}/${date}</li>
 		`
-	}
-
-
-	function sticks () {
-		var h = document.getElementById("test");
-		var stuck = false;
-		var stickPoint = getDistance();
-
-		function getDistance() {
-			var topDist = h.offsetTop;
-			return topDist;
-		}
-
-		window.onscroll = (evt => {
-			h = h || document.getElementById("test")
-			stickPoint = stickPoint || getDistance();
-
-			var distance = getDistance() - window.pageYOffset;
-			var offset = window.pageYOffset;
-			
-			if ((distance <= 0) && !stuck) {
-				h.style.position = 'fixed';
-				h.style.top = '0px';
-				stuck = true;
-			}
-			else if (stuck && (offset <= stickPoint)) {
-				h.style.position = 'static';
-				stuck = false;
-			}
-		})
 	}
 
 </script>
