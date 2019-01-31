@@ -67,6 +67,11 @@ li.weekday {
   outline: none;
 }
 
+.scroll:active {
+  opacity: 1;
+  transition: none;
+}
+
 .scroll.fade-out {
   opacity: 0;
 }
@@ -92,7 +97,7 @@ li.weekday {
 @media (hover) {
   .scroll:hover {
     opacity: 1;
-}
+  }
 }
 /*****************************************/
 
