@@ -35,6 +35,10 @@ span {
 	width: 2rem;
 	display: inline-block;
 }
+span.time {
+	margin-left: 1rem;
+  font-size: 20px;
+}
 li.weekday {
 	background-color: white;
 	width: -webkit-fill-available;
@@ -53,9 +57,9 @@ li.weekday {
   right: 0;
   display: block;
   z-index: 1;
-  background: white;
+  background-color: #fff;
 	padding-left: 1rem;
-	/* border-top: #4e4e4e; */
+  box-shadow: 0 2px 2px 0 rgba(0,0,0,.07);
 }
 
 .scroll {
