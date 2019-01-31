@@ -32,15 +32,17 @@
 
 <body>
 	<div id="content">
-		<ul id="tempList">
-			<li>
-				<div class="spinner">
-					<div class="bounce1"></div>
-					<div class="bounce2"></div>
-					<div class="bounce3"></div>
-				</div>
-			</li>
-		</ul>
+		<article>
+			<ul id="tempList">
+				<li>
+					<div class="spinner">
+						<div class="bounce1"></div>
+						<div class="bounce2"></div>
+						<div class="bounce3"></div>
+					</div>
+				</li>
+			</ul>
+		</article>
 	</div>
 	<button title="Back to top" class="scroll fade-out" id="scroll-top">
 		<i class="chevron"></i>
@@ -62,13 +64,13 @@
 	})
 
 	function animateScroll() {
-		const scrollTime = Math.min(2.0, Math.max(0.5, window.pageYOffset/3000))
+		const scrollTime = Math.min(2.0, Math.max(0.5, window.pageYOffset / 3000))
 		contentContainer.style.transition = `top ${scrollTime}s cubic-bezier(0,0,0,1)`
 		contentContainer.style.top = `${window.pageYOffset}px`
-		setTimeout(()=>{
+		setTimeout(() => {
 			contentContainer.style.transition = 'none';
 			contentContainer.style.top = ''
-			window.scrollTo(0,0)
+			window.scrollTo(0, 0)
 		}, scrollTime * 1000)
 	}
 
@@ -80,7 +82,6 @@
 
 		let html = getWeekdayHtml(hourlyForecast[0].startTime)
 
-		const ul = document.getElementById('tempList')
 		hourlyForecast.forEach(p => {
 			const startTime = formatDate(p.startTime)
 			if (startTime === '12a') html += getWeekdayHtml(p.startTime)
@@ -93,7 +94,27 @@
 			`
 		})
 
-		ul.innerHTML = html
+		contentContainer.innerHTML = html
+
+		setupDetails()
+	}
+
+	function setupDetails() {
+		const details = document.getElementsByTagName('details')
+		for (const detail of details) {
+			detail.addEventListener('toggle', toggleDetails)
+		}
+
+		let isChanging = false
+
+		function toggleDetails(e) {
+			if (isChanging) return
+			isChanging = true
+			for (const detail of details) {
+				detail.open = e.target.open
+			}
+			isChanging = false
+		}
 	}
 
 	function formatDate(date) {
@@ -110,7 +131,7 @@
 		const month = datetime.getMonth() + 1
 		const date = datetime.getDate()
 		return `
-			</ul><ul><li class="sticky">${day} ${month}/${date}</li>
+			</ul></details><details><summary class="sticky">${day} ${month}/${date}</summary><ul>
 		`
 	}
 
