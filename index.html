@@ -19,7 +19,7 @@
 	<link rel="icon" type="image/png" href="images/favicon-32x32.png" sizes="32x32" />
 	<link rel="icon" type="image/png" href="images/favicon-16x16.png" sizes="16x16" />
 	<link rel="icon" type="image/png" href="images/favicon-128.png" sizes="128x128" />
-	<meta name="application-name" content="blueclouds"/>
+	<meta name="application-name" content="blueclouds" />
 	<meta name="msapplication-TileColor" content="#FFFFFF" />
 	<meta name="msapplication-TileImage" content="images/mstile-144x144.png" />
 	<meta name="msapplication-square70x70logo" content="images/mstile-70x70.png" />
@@ -31,16 +31,17 @@
 </head>
 
 <body>
-
-	<ul id="tempList">
-		<li>
-			<div class="spinner">
-				<div class="bounce1"></div>
-				<div class="bounce2"></div>
-				<div class="bounce3"></div>
-			</div>
-		</li>
-	</ul>
+	<div id="content">
+		<ul id="tempList">
+			<li>
+				<div class="spinner">
+					<div class="bounce1"></div>
+					<div class="bounce2"></div>
+					<div class="bounce3"></div>
+				</div>
+			</li>
+		</ul>
+	</div>
 	<button title="Back to top" class="scroll fade-out" id="scroll-top">
 		<i class="chevron"></i>
 	</button>
@@ -49,21 +50,27 @@
 	const weekdays = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday']
 	const scrollButton = document.getElementById('scroll-top')
 
-	scrollButton.addEventListener('click', scrollDistance)
+	scrollButton.addEventListener('click', animateScroll)
 
-	let scrollInterval = 0
-	
+	const contentContainer = document.getElementById('content')
+	const transition = 'top 0.8s cubic-bezier(1,0.25,0,0.75)'
+	contentContainer.style.transition = transition
+
 	navigator.geolocation.getCurrentPosition(geoSuccess)
 
-	window.addEventListener('scroll', evt=> {
-		if (window.pageYOffset >= 50 && hasClass(scrollButton,'fade-out')) scrollButton.classList.remove('fade-out')
-		else if (window.pageYOffset < 50 && !hasClass(scrollButton,'fade-out')) scrollButton.classList.add('fade-out')
+	window.addEventListener('scroll', evt => {
+		if (window.pageYOffset >= 50 && hasClass(scrollButton, 'fade-out')) scrollButton.classList.remove('fade-out')
+		else if (window.pageYOffset < 50 && !hasClass(scrollButton, 'fade-out')) scrollButton.classList.add('fade-out')
 	})
 
-	function scrollDistance() {
-		if (window.pageYOffset !== 0) window.requestAnimationFrame(scrollDistance);
-
-		window.scroll(0, window.pageYOffset - 50)
+	function animateScroll() {
+		contentContainer.style.transition = transition
+		contentContainer.style.top = `${window.pageYOffset}px`
+		setTimeout(()=>{
+			contentContainer.style.transition = 'none';
+			contentContainer.style.top = ''
+			window.scrollTo(0,0)
+		}, parseFloat(contentContainer.style.transitionDuration) * 1000)
 	}
 
 	async function geoSuccess(pos) {
@@ -111,7 +118,6 @@
 	function hasClass(element, cls) {
 		return (' ' + element.className + ' ').indexOf(' ' + cls + ' ') > -1;
 	}
-
 </script>
 
 </html>
