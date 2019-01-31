@@ -71,10 +71,6 @@ li.weekday {
   opacity: 0;
 }
 
-.scroll:hover {
-	opacity: 1;
-}
-
 .chevron {
 	color: white;
 	border-style: solid;
@@ -91,6 +87,15 @@ li.weekday {
 	margin-top: -5px;
 	margin-left: -4px;
 }
+
+/************* Media Queries *************/
+@media (hover) {
+  .scroll:hover {
+    opacity: 1;
+}
+}
+/*****************************************/
+
 
 
 /************* Loading Bounce *************/
