@@ -82,11 +82,11 @@
 		const urlHourly = weatherUrl(latitude, longitude, '/hourly')
 		const urlDaily = weatherUrl(latitude, longitude)
 		const responseHourly = await fetch(urlHourly)
-		const responseDaily = await fetch(urlDaily)
+		// const responseDaily = await fetch(urlDaily)
 		const jsonHourly = await responseHourly.json()
-		const jsonDaily = await responseDaily.json()
+		// const jsonDaily = await responseDaily.json()
 		const hourlyForecast = jsonHourly.properties.periods
-		const dailyForecast = jsonDaily.properties.periods
+		// const dailyForecast = jsonDaily.properties.periods
 
 		let html = getWeekdayHtml(hourlyForecast[0].startTime)
 
