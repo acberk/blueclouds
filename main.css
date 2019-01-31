@@ -6,6 +6,10 @@ body {
 	padding: 0;
 	width:100%;
 }
+summary {
+  outline: none;
+  padding: 1vh 0 1vh 0;
+}
 #content {
 	position:absolute;
 	top:0;
