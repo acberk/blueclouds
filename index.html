@@ -41,14 +41,32 @@
 			</div>
 		</li>
 	</ul>
+	<button title="Back to top" class="scroll fade-out" id="scroll-top">
+		<i class="chevron"></i>
+	</button>
 </body>
 <script>
 	const weekdays = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday']
+	const scrollButton = document.getElementById('scroll-top')
+
+	scrollButton.addEventListener('click', scrollDistance)
+
+	let scrollInterval = 0
+	
+	navigator.geolocation.getCurrentPosition(geoSuccess)
+
+	window.addEventListener('scroll', evt=> {
+		if (window.pageYOffset >= 50 && hasClass(scrollButton,'fade-out')) scrollButton.classList.remove('fade-out')
+		else if (window.pageYOffset < 50 && !hasClass(scrollButton,'fade-out')) scrollButton.classList.add('fade-out')
+	})
+
+	function scrollDistance() {
+		if (window.pageYOffset !== 0) window.requestAnimationFrame(scrollDistance);
+
+		window.scroll(0, window.pageYOffset - 50)
+	}
 
 	async function geoSuccess(pos) {
-
-
-
 		const { latitude, longitude } = pos.coords
 		const response = await fetch(`https://api.weather.gov/points/${latitude.toFixed(4)},${longitude.toFixed(4)}/forecast/hourly`)
 		const json = await response.json()
@@ -71,7 +89,6 @@
 
 		ul.innerHTML = html
 	}
-	navigator.geolocation.getCurrentPosition(geoSuccess)
 
 	function formatDate(date) {
 		date = parseInt(/T(\d\d)/.exec(date)[1])
@@ -89,6 +106,10 @@
 		return `
 			</ul><ul><li class="sticky">${day} ${month}/${date}</li>
 		`
+	}
+
+	function hasClass(element, cls) {
+		return (' ' + element.className + ' ').indexOf(' ' + cls + ' ') > -1;
 	}
 
 </script>
