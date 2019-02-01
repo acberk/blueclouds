@@ -24,8 +24,8 @@ ul {
 }
 img {
 	vertical-align: middle;
-	height: 7vh;
-	border-radius:20%;
+	/* height: 7vh; */
+	border-radius: 6px;
 	margin-left: 1vw
 }
 li {
@@ -52,7 +52,15 @@ li.weekday {
 	/* height: 5vh; */
 	padding-left: 1rem;
 }
+summary>div{
+	display: inline-block;
+	float: right;
+}
+
 .sticky {
+	overflow: auto;
+	width: -webkit-fill-available;
+	width: -moz-available;
   position: -webkit-sticky;
   position: -moz-sticky;
   position: -o-sticky;
@@ -65,6 +73,7 @@ li.weekday {
   z-index: 1;
   background-color: #fff;
 	padding-left: 1rem;
+	border: rgba(0,0,0,0.07) 0.5px solid;
   box-shadow: 0 2px 2px 0 rgba(0,0,0,.07);
 }
 
@@ -180,4 +189,13 @@ details > summary::-webkit-details-marker {
 	100%  { transform: scale(1, 1) } */
 	0% { max-height: 0; }
 	100% { max-height: 2200px; }
+ }
+
+ /* summary img {
+	 height: 50%;
+	 width: 50%;
+
+ } */
+ summary>div>div{
+	 /* display: bl; */
  }
