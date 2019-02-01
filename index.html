@@ -98,9 +98,13 @@
 
 		let html = getWeekdayHtml(hourlyForecast[0].startTime, dailyForecast)
 
-		hourlyForecast.forEach(p => {
+		for (const p of hourlyForecast) {
 			const startTime = formatDate(p.startTime)
-			if (startTime === '12:00a') html += getWeekdayHtml(p.startTime, dailyForecast)
+			if (startTime === '12:00a') {
+				const header = getWeekdayHtml(p.startTime, dailyForecast)
+				if (!header) break
+				html += header
+			}
 			html += `
 				<li class="hourly">
 					<img src="${p.icon}"/>
@@ -108,6 +112,9 @@
 					<span class="temperature">${p.temperature}°</span>
 				</li>
 			`
+
+		}
+		hourlyForecast.forEach(p => {
 		})
 
 		contentContainer.innerHTML = html
@@ -158,6 +165,8 @@
 		const weekdays = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday']
 		const daily = getDailyfromDate(dailyForecast, datetime)
 
+		if (!daily || !daily.length) return false
+
 		datetime = new Date(datetime)
 		const day = weekdays[datetime.getDay()]
 		const month = datetime.getMonth() + 1
@@ -168,7 +177,7 @@
 			</ul></details>
 			<details>
 				<summary class="sticky">${day} ${month}/${date}
-					<div>
+					<div class="highLow">
 					${daily.map(d => `<img src="${d.icon.replace('medium', 'small')}"/>${d.temperature}`).join('')}
 					</div>
 				</summary>

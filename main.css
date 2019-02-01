@@ -52,11 +52,9 @@ li.weekday {
 	/* height: 5vh; */
 	padding-left: 1rem;
 }
-summary>div{
-	display: inline-block;
+summary .highLow{
 	float: right;
 }
-
 .sticky {
 	overflow: auto;
 	width: -webkit-fill-available;
