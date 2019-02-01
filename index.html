@@ -117,8 +117,10 @@
 
 		let isChanging = false
 
+
 		function toggleDetails(e) {
 			if (isChanging) return
+			localStorage.setItem('detailsState', e.target.open ? 'open' : '')
 			isChanging = true
 			for (const detail of details) {
 				detail.open = e.target.open
@@ -142,7 +144,7 @@
 		const month = datetime.getMonth() + 1
 		const date = datetime.getDate()
 		return `
-			</ul></details><details><summary class="sticky">${day} ${month}/${date}</summary><ul>
+			</ul></details><details ${localStorage.getItem('detailsState') || ''}><summary class="sticky">${day} ${month}/${date}</summary><ul>
 		`
 	}
 
@@ -150,7 +152,7 @@
 		return (' ' + element.className + ' ').indexOf(' ' + cls + ' ') > -1;
 	}
 
-	function weatherUrl(lat, lng, endpoint='') {
+	function weatherUrl(lat, lng, endpoint = '') {
 		return `https://api.weather.gov/points/${lat.toFixed(4)},${lng.toFixed(4)}/forecast${endpoint}`
 	}
 </script>
