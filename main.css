@@ -19,8 +19,9 @@ summary {
 ul {
 	list-style: none;
 	margin: 0;
-	padding: 0;
-  }
+  padding: 0;
+  overflow: hidden;
+}
 img {
 	vertical-align: middle;
 	height: 7vh;
