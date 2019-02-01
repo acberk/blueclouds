@@ -168,7 +168,7 @@
 			</ul></details>
 			<details ${localStorage.getItem('detailsState') || ''}>
 				<summary class="sticky">${day} ${month}/${date}
-					${daily.map(d => `<img src="${d.icon}"/>`)}
+					${daily.map(d => `<img src="${d.icon}"/>`).join('')}
 				</summary>
 			<ul>
 		`
