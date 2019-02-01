@@ -83,18 +83,24 @@
 		const { latitude, longitude } = pos.coords
 		const urlHourly = weatherUrl(latitude, longitude, '/hourly')
 		const urlDaily = weatherUrl(latitude, longitude)
-		const responseHourly = await fetch(urlHourly)
-		// const responseDaily = await fetch(urlDaily)
-		const jsonHourly = await responseHourly.json()
-		// const jsonDaily = await responseDaily.json()
-		const hourlyForecast = jsonHourly.properties.periods
-		// const dailyForecast = jsonDaily.properties.periods
+		const [hourlyForecast, dailyForecast] = await Promise.all([
+			(async () => {
+				const responseHourly = await fetch(urlHourly)
+				const jsonHourly = await responseHourly.json()
+				return jsonHourly.properties.periods
+			})(),
+			(async () => {
+				const responseDaily = await fetch(urlDaily)
+				const jsonDaily = await responseDaily.json()
+				return jsonDaily.properties.periods
+			})()
+		])
 
-		let html = getWeekdayHtml(hourlyForecast[0].startTime)
+		let html = getWeekdayHtml(hourlyForecast[0].startTime, dailyForecast)
 
 		hourlyForecast.forEach(p => {
 			const startTime = formatDate(p.startTime)
-			if (startTime === '12:00a') html += getWeekdayHtml(p.startTime)
+			if (startTime === '12:00a') html += getWeekdayHtml(p.startTime, dailyForecast)
 			html += `
 				<li class="hourly">
 					<img src="${p.icon}"/>
@@ -137,14 +143,34 @@
 		return `${date}:00a`
 	}
 
-	function getWeekdayHtml(datetime) {
+	function getDailyfromDate(dailyForecast, date) {
+		const results = []
+		date = /^\d{4}-\d\d-\d\d/.exec(date)[0]
+		dailyForecast.forEach(d => {
+			if (d.startTime.startsWith(date)) {
+				results.push(d)
+			}
+		})
+		return results
+	}
+
+	function getWeekdayHtml(datetime, dailyForecast) {
 		const weekdays = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday']
+		const daily = getDailyfromDate(dailyForecast, datetime)
+
 		datetime = new Date(datetime)
 		const day = weekdays[datetime.getDay()]
 		const month = datetime.getMonth() + 1
 		const date = datetime.getDate()
+
+
 		return `
-			</ul></details><details ${localStorage.getItem('detailsState') || ''}><summary class="sticky">${day} ${month}/${date}</summary><ul>
+			</ul></details>
+			<details ${localStorage.getItem('detailsState') || ''}>
+				<summary class="sticky">${day} ${month}/${date}
+					${daily.map(d => `<img src="${d.icon}"/>`)}
+				</summary>
+			<ul>
 		`
 	}
 
