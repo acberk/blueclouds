@@ -166,7 +166,7 @@
 
 		return `
 			</ul></details>
-			<details ${'' || localStorage.getItem('detailsState') || ''}>
+			<details>
 				<summary class="sticky">${day} ${month}/${date}
 					<div>
 					${daily.map(d => `<img src="${d.icon.replace('medium', 'small')}"/>${d.temperature}`).join('')}
