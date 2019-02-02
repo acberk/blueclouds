@@ -10,6 +10,9 @@ summary {
   outline: none;
   padding: 1vh 0 1vh 0;
 }
+summary>span {
+	flex-grow: 1
+}
 #content {
 	position:absolute;
 	top:0;
@@ -23,10 +26,12 @@ ul {
   overflow: hidden;
 }
 img {
-	vertical-align: middle;
 	/* height: 7vh; */
 	border-radius: 6px;
 	margin-left: 1vw
+}
+li img {
+	vertical-align: middle;
 }
 li {
 	padding: 1vh 0 1vh 0;
@@ -35,7 +40,7 @@ li {
 li.hourly:nth-child(2n) {
 	background-color: rgb(226, 226, 226);
 }
-span {
+li span {
 	margin-left: 2rem;
 	text-align: right;
 	width: 2rem;
@@ -67,7 +72,8 @@ summary .highLow{
   top: 0;
   left: 0;
   right: 0;
-  display: block;
+  display: flex;
+  align-items: center;
   z-index: 1;
   background-color: #fff;
 	padding-left: 1rem;
@@ -187,13 +193,4 @@ details > summary::-webkit-details-marker {
 	100%  { transform: scale(1, 1) } */
 	0% { max-height: 0; }
 	100% { max-height: 2200px; }
- }
-
- /* summary img {
-	 height: 50%;
-	 width: 50%;
-
- } */
- summary>div>div{
-	 /* display: bl; */
  }

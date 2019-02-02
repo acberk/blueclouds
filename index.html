@@ -96,7 +96,7 @@
 			})()
 		])
 
-		let html = getWeekdayHtml(hourlyForecast[0].startTime, dailyForecast)
+		let html = getWeekdayHtml(hourlyForecast[0].startTime, dailyForecast, true)
 
 		for (const p of hourlyForecast) {
 			const startTime = formatDate(p.startTime)
@@ -151,35 +151,38 @@
 	}
 
 	function getDailyfromDate(dailyForecast, date) {
-		const results = []
+		const results = {}
 		date = /^\d{4}-\d\d-\d\d/.exec(date)[0]
-		dailyForecast.forEach(d => {
+		for (const d of dailyForecast) {
 			if (d.startTime.startsWith(date)) {
-				results.push(d)
+				results[d.isDaytime ? 'day' : 'night'] = d
 			}
-		})
+		}
 		return results
 	}
 
-	function getWeekdayHtml(datetime, dailyForecast) {
+	function getWeekdayHtml(datetime, dailyForecast, force) {
 		const weekdays = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday']
 		const daily = getDailyfromDate(dailyForecast, datetime)
 
-		if (!daily || !daily.length) return false
+		if (!force && (!daily.day || !daily.night)) return false
 
 		datetime = new Date(datetime)
 		const day = weekdays[datetime.getDay()]
 		const month = datetime.getMonth() + 1
 		const date = datetime.getDate()
 
-
 		return `
 			</ul></details>
 			<details>
-				<summary class="sticky">${day} ${month}/${date}
-					<div class="highLow">
-					${daily.map(d => `<img src="${d.icon.replace('medium', 'small')}"/>${d.temperature}`).join('')}
-					</div>
+				<summary class="sticky"><span>${day} ${month}/${date}</span>
+					${(daily.day || daily.night) && `<div class="highLow">
+						<img src="${(daily.day || daily.night).icon.replace('medium', 'small')}" />
+						<div style="display: inline-block;">
+							<div class="high">${(daily.day && daily.day.temperature) || ''}</div>
+							<div class="low">${(daily.night && daily.night.temperature) || ''}</div>
+						</div>
+					</div>`}
 				</summary>
 			<ul>
 		`
