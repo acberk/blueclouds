@@ -58,7 +58,9 @@ li.weekday {
 	padding-left: 1rem;
 }
 summary .highLow{
-	float: right;
+	display: inline-block;
+	font-size: 80%;
+	margin: 0 0.5em;
 }
 .sticky {
 	overflow: auto;

@@ -161,11 +161,11 @@
 		return results
 	}
 
-	function getWeekdayHtml(datetime, dailyForecast, force) {
+	function getWeekdayHtml(datetime, dailyForecast) {
 		const weekdays = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday']
 		const daily = getDailyfromDate(dailyForecast, datetime)
 
-		if (!force && (!daily.day || !daily.night)) return false
+		if (!daily.day && !daily.night) return false
 
 		datetime = new Date(datetime)
 		const day = weekdays[datetime.getDay()]
@@ -176,13 +176,11 @@
 			</ul></details>
 			<details>
 				<summary class="sticky"><span>${day} ${month}/${date}</span>
-					${(daily.day || daily.night) && `<div class="highLow">
-						<img src="${(daily.day || daily.night).icon.replace('medium', 'small')}" />
-						<div style="display: inline-block;">
-							<div class="high">${(daily.day && daily.day.temperature) || ''}</div>
-							<div class="low">${(daily.night && daily.night.temperature) || ''}</div>
-						</div>
-					</div>`}
+					<img src="${(daily.day || daily.night).icon.replace('medium', 'small')}" />
+					<div class="highLow">
+						<div>${daily.day ? daily.day.temperature + '°' : '\xa0'}</div>
+						<div>${daily.night ?  daily.night.temperature + '°' : '\xa0'}</div>
+					</div>
 				</summary>
 			<ul>
 		`
