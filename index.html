@@ -79,24 +79,22 @@
 		}, scrollTime * 1000)
 	}
 
+	async function fetchForecastData(url) {
+		const response = await fetch(url)
+		const json = await response.json()
+		return json.properties.periods
+	}
+
 	async function geoSuccess(pos) {
 		const { latitude, longitude } = pos.coords
 		const urlHourly = weatherUrl(latitude, longitude, '/hourly')
 		const urlDaily = weatherUrl(latitude, longitude)
 		const [hourlyForecast, dailyForecast] = await Promise.all([
-			(async () => {
-				const responseHourly = await fetch(urlHourly)
-				const jsonHourly = await responseHourly.json()
-				return jsonHourly.properties.periods
-			})(),
-			(async () => {
-				const responseDaily = await fetch(urlDaily)
-				const jsonDaily = await responseDaily.json()
-				return jsonDaily.properties.periods
-			})()
+			fetchForecastData(urlHourly),
+			fetchForecastData(urlDaily)
 		])
 
-		let html = getWeekdayHtml(hourlyForecast[0].startTime, dailyForecast, true)
+		let html = getWeekdayHtml(hourlyForecast[0].startTime, dailyForecast)
 
 		for (const p of hourlyForecast) {
 			const startTime = formatDate(p.startTime)
@@ -109,7 +107,7 @@
 				<li class="hourly">
 					<img src="${p.icon}"/>
 					<span class="time">${startTime}</span>
-					<span class="temperature">${p.temperature}°</span>
+					<span class="temperature">${p.temperature}&deg;</span>
 				</li>
 			`
 
@@ -175,11 +173,12 @@
 		return `
 			</ul></details>
 			<details>
-				<summary class="sticky"><span>${day} ${month}/${date}</span>
+				<summary class="sticky">
+					<span>${day} ${month}/${date}</span>
 					<img src="${(daily.day || daily.night).icon.replace('medium', 'small')}" />
 					<div class="highLow">
-						<div>${daily.day ? daily.day.temperature + '°' : '\xa0'}</div>
-						<div>${daily.night ?  daily.night.temperature + '°' : '\xa0'}</div>
+						<div>${daily.day ? daily.day.temperature + '&deg;' : '\xa0'}</div>
+						<div>${daily.night ?  daily.night.temperature + '&deg;' : '\xa0'}</div>
 					</div>
 				</summary>
 			<ul>
