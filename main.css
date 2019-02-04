@@ -25,7 +25,7 @@ ul {
   padding: 0;
 	overflow: hidden;
 	max-height: 0;
-	transition: max-height 0.2s ease-out;
+	transition: max-height 0.4s ease-out;
 }
 img {
 	/* height: 7vh; */
