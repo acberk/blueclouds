@@ -99,9 +99,14 @@
 			}
 			html += `
 				<li class="hourly">
-					<img src="${p.icon}"/>
-					<span class="time">${startTime}</span>
-					<span class="temperature">${p.temperature}&deg;</span>
+					<div class="left-detail">
+						<img src="${p.icon}"/>
+						<span class="time">${startTime}</span>
+						<span class="temperature">${p.temperature}&deg;</span>
+						<span class="flex-pad"><span>
+					</div>
+					<div class="right-detail">
+					</div>
 				</li>
 			`
 
