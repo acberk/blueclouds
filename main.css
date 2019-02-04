@@ -23,7 +23,9 @@ ul {
 	list-style: none;
 	margin: 0;
   padding: 0;
-  overflow: hidden;
+	overflow: hidden;
+	max-height: 0;
+	transition: max-height 0.2s ease-out;
 }
 img {
 	/* height: 7vh; */
@@ -38,7 +40,7 @@ li {
 	background-color: white;
 }
 li.hourly:nth-child(2n) {
-	background-color: rgb(226, 226, 226);
+	background-color: #eee;
 }
 li span {
 	margin-left: 2rem;
@@ -80,8 +82,16 @@ li.weekday {
   background-color: #fff;
 	padding-left: 1rem;
 	border: rgba(0,0,0,0.07) 0.5px solid;
-  box-shadow: 0 2px 2px 0 rgba(0,0,0,.07);
+	box-shadow: 0 2px 2px 0 rgba(0,0,0,.07);
+	cursor: pointer;
+	transition: 0.4s;
+	outline: none;
 }
+
+.sticky:active {
+	background-color: #eee;
+}
+
 
 .scroll {
   opacity: 0.3;
@@ -128,7 +138,11 @@ li.weekday {
 @media (hover) {
   .scroll:hover {
     opacity: 1;
-  }
+	}
+	
+	.sticky:hover {
+			background-color: #eee;
+	}
 }
 /*****************************************/
 
