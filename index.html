@@ -32,17 +32,15 @@
 
 <body>
 	<div id="content">
-		<article>
-			<ul id="tempList">
-				<li>
-					<div class="spinner">
-						<div class="bounce1"></div>
-						<div class="bounce2"></div>
-						<div class="bounce3"></div>
-					</div>
-				</li>
-			</ul>
-		</article>
+		<ul id="hourlyList">
+			<li>
+				<div class="spinner">
+					<div class="bounce1"></div>
+					<div class="bounce2"></div>
+					<div class="bounce3"></div>
+				</div>
+			</li>
+		</ul>
 	</div>
 	<button title="Back to top" class="scroll fade-out" id="scroll-top">
 		<i class="chevron"></i>
@@ -50,7 +48,7 @@
 </body>
 <script>
 	const scrollButton = document.getElementById('scroll-top')
-	const ul = document.getElementById('tempList')
+	const ul = document.getElementById('hourlyList')
 
 	scrollButton.addEventListener('click', animateScroll)
 
@@ -117,7 +115,7 @@
 
 		contentContainer.innerHTML = html
 
-		setupDetails()
+		// setupDetails()
 	}
 
 	function setupDetails() {
@@ -171,16 +169,17 @@
 		const date = datetime.getDate()
 
 		return `
-			</ul></details>
-			<details>
-				<summary class="sticky">
+			</ul>
+			</div>
+			<div>
+				<div class="accordion sticky">
 					<span>${day} ${month}/${date}</span>
 					<img src="${(daily.day || daily.night).icon.replace('medium', 'small')}" />
 					<div class="highLow">
 						<div>${daily.day ? daily.day.temperature + '&deg;' : '\xa0'}</div>
 						<div>${daily.night ?  daily.night.temperature + '&deg;' : '\xa0'}</div>
 					</div>
-				</summary>
+				</div>
 			<ul>
 		`
 	}

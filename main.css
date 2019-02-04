@@ -6,12 +6,12 @@ body {
 	padding: 0;
 	width:100%;
 }
-summary {
+.accordion {
   outline: none;
-  padding: 1vh 0 1vh 0;
+	padding: 1vh 0 1vh 0;
 }
-summary>span {
-	flex-grow: 1
+.accordion>span {
+	flex-grow: 1;
 }
 #content {
 	position:absolute;
@@ -57,7 +57,7 @@ li.weekday {
 	/* height: 5vh; */
 	padding-left: 1rem;
 }
-summary .highLow{
+.accordion .highLow{
 	display: inline-block;
 	font-size: 80%;
 	margin: 0 0.5em;
@@ -178,21 +178,9 @@ summary .highLow{
 }
 /********************************************/
 
-summary {
-	list-style: none;
-}
-
-details > summary::-webkit-details-marker {
-	display: none;
- }
-
- details[open] summary ~ * {
-	animation: expand 1s ease-in-out;
- }
-
- @keyframes expand {
+@keyframes expand {
 	/* 0%    { transform: scale(1, 0) }
 	100%  { transform: scale(1, 1) } */
 	0% { max-height: 0; }
 	100% { max-height: 2200px; }
- }
+}
