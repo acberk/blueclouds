@@ -160,9 +160,11 @@
 	function getPrecipitation(daily) {
 		const dailyVal = daily.day || daily.night
 		// const precipitation = /(?<=,)\d+(?=[\?\/])/g.exec(dailyVal.icon)
-		const precipitation = dailyVal.icon.match(/(?<=,)\d+(?=[\?\/])/g) || []
+		const precipitation = dailyVal.icon.match(/(?<=,)\d+(?=[\?\/])/g) || [0]
 
-		return Math.max(...precipitation)
+		const retVal = Math.max(...precipitation)
+
+		return retVal > 0 ? retVal : null
 	}
 
 	function getWeekdayHtml(datetime, dailyForecast) {
@@ -184,7 +186,8 @@
 			</div>
 			<div>
 					<div class="accordion sticky">
-						<span>${day} ${month}/${date}</span>
+						<span><span class="day">${day}  </span><span class="month">${month}/${date}</span></span>
+						${precipitation ? `<span>&#9748; ${precipitation}%</span>` : ``}
 						<img src="${(daily.day || daily.night).icon.replace('medium', 'small')}" />
 						<div class="highLow">
 							<div>${daily.day ? daily.day.temperature + '&deg;' : '\xa0'}</div>

@@ -6,6 +6,9 @@ body {
 	padding: 0;
 	width:100%;
 }
+.day {
+	font-size: 20px;
+}
 .accordion {
   outline: none;
 	padding: 1vh 0 1vh 0;
