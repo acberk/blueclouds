@@ -90,6 +90,7 @@
 
 		let html = getWeekdayHtml(hourlyForecast[0].startTime, dailyForecast)
 
+
 		for (const p of hourlyForecast) {
 			const startTime = formatDate(p.startTime)
 			if (startTime === '12:00a') {
@@ -116,7 +117,6 @@
 
 		contentContainer.innerHTML = html
 
-		// setupDetails()
 		setupAccordionListener()
 	}
 
@@ -140,26 +140,6 @@
 
 	}
 
-	// function setupDetails() {
-	// 	const details = document.getElementsByTagName('details')
-	// 	// for (const detail of details) {
-	// 	// 	detail.addEventListener('toggle', toggleDetails)
-	// 	// }
-
-	// 	let isChanging = false
-
-
-	// 	function toggleDetails(e) {
-	// 		if (isChanging) return
-	// 		localStorage.setItem('detailsState', e.target.open ? 'open' : '')
-	// 		isChanging = true
-	// 		for (const detail of details) {
-	// 			detail.open = e.target.open
-	// 		}
-	// 		isChanging = false
-	// 	}
-	// }
-
 	function formatDate(date) {
 		date = parseInt(/T(\d\d)/.exec(date)[1])
 		if (date === 0) return '12:00a'
@@ -179,11 +159,22 @@
 		return results
 	}
 
+	function getPrecipitation(daily) {
+		const dailyVal = daily.day || daily.night
+		// const precipitation = /(?<=,)\d+(?=[\?\/])/g.exec(dailyVal.icon)
+		const precipitation = dailyVal.icon.match(/(?<=,)\d+(?=[\?\/])/g) || []
+
+		return Math.max(...precipitation)
+	}
+
 	function getWeekdayHtml(datetime, dailyForecast) {
 		const weekdays = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday']
 		const daily = getDailyfromDate(dailyForecast, datetime)
 
 		if (!daily.day && !daily.night) return false
+
+		const precipitation = getPrecipitation(daily)
+		
 
 		datetime = new Date(datetime)
 		const day = weekdays[datetime.getDay()]
