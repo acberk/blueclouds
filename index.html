@@ -53,7 +53,7 @@
 
 	navigator.geolocation.getCurrentPosition(geoSuccess, err => {
 		if (err) {
-			console.error(err)
+			document.write(err.message)
 		}
 	})
 
@@ -61,6 +61,11 @@
 		if (window.pageYOffset >= 50 && hasClass(scrollButton, 'fade-out')) scrollButton.classList.remove('fade-out')
 		else if (window.pageYOffset < 50 && !hasClass(scrollButton, 'fade-out')) scrollButton.classList.add('fade-out')
 	})
+
+	window.addEventListener('unhandledrejection', evt => {
+		document.write(evt.promise);
+		document.write(evt.reason);
+	});
 
 	function animateScroll() {
 		const scrollTime = Math.min(2.0, Math.max(0.5, window.pageYOffset / 3000))
@@ -159,12 +164,13 @@
 
 	function getPrecipitation(daily) {
 		const dailyVal = daily.day || daily.night
-		// const precipitation = /(?<=,)\d+(?=[\?\/])/g.exec(dailyVal.icon)
-		const precipitation = dailyVal.icon.match(/(?<=,)\d+(?=[\?\/])/g) || [0]
-
-		const retVal = Math.max(...precipitation)
-
-		return retVal > 0 ? retVal : null
+		let precipitation = dailyVal.icon.match(/(,)\d+(?=[\?\/])/g)
+		let retVal
+		if (precipitation) {
+			precipitation = precipitation.map(x=>x.replace(',',''))
+			retVal = Math.max(...precipitation)
+		}
+		return retVal
 	}
 
 	function getWeekdayHtml(datetime, dailyForecast) {
