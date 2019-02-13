@@ -51,11 +51,30 @@
 
 	const contentContainer = document.getElementById('content')
 
-	navigator.geolocation.getCurrentPosition(geoSuccess, err => {
-		if (err) {
-			document.write(err.message)
+	const lat = localStorage.getItem('lat')
+	const lon = localStorage.getItem('lon')
+	const stamp = localStorage.getItem('timestamp')
+
+	/* Reuse location for 10 minutes */
+	if (lat && lon && stamp && (Date.now() - stamp) < 600000) {
+		const geo = {
+			coords: {
+				latitude: +lat,
+				longitude: +lon
+			},
+			timestamp: +stamp
 		}
-	})
+
+		geoSuccess(geo)
+	}
+	else {
+		localStorage.clear()
+		navigator.geolocation.getCurrentPosition(geoSuccess, err => {
+			if (err) {
+				document.write(err.message)
+			}
+		})
+	}
 
 	window.addEventListener('scroll', evt => {
 		if (window.pageYOffset >= 50 && hasClass(scrollButton, 'fade-out')) scrollButton.classList.remove('fade-out')
@@ -85,7 +104,15 @@
 	}
 
 	async function geoSuccess(pos) {
+		
 		const { latitude, longitude } = pos.coords
+
+		if (!(localStorage.getItem('lat') && localStorage.getItem('lon') && localStorage.getItem('timestamp'))) {
+			localStorage.setItem('lat', latitude)
+			localStorage.setItem('lon', longitude)
+			localStorage.setItem('timestamp', pos.timestamp)
+		}
+
 		const urlHourly = weatherUrl(latitude, longitude, '/hourly')
 		const urlDaily = weatherUrl(latitude, longitude)
 		const [hourlyForecast, dailyForecast] = await Promise.all([
