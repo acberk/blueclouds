@@ -192,9 +192,14 @@
 			</div>
 			<div>
 					<div class="accordion sticky">
-						<span><span class="day">${day}  </span><span class="month">${month}/${date}</span></span>
-						${precipitation ? `<span>&#9748; ${precipitation}%</span>` : ``}
-						<img src="${(daily.day || daily.night).icon.replace('medium', 'small')}" />
+						<div class="dayDate">
+							<div class="dayMonth">
+								<div class="day">${day}</div>
+								<div class="month">${month}/${date}</div>
+							</div>
+							${precipitation ? `<span class="rain">&#9748; ${precipitation}%</span>` : `<span class="flex-pad"></span>`}
+							<img src="${(daily.day || daily.night).icon.replace('medium', 'small')}" />
+						</div>
 						<div class="highLow">
 							<div>${daily.day ? daily.day.temperature + '&deg;' : '\xa0'}</div>
 							<div>${daily.night ?  daily.night.temperature + '&deg;' : '\xa0'}</div>
