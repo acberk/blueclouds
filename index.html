@@ -100,7 +100,7 @@
 	async function fetchForecastData(url) {
 		const response = await fetch(url)
 		const json = await response.json()
-		return json.properties.periods
+		return json.properties
 	}
 
 	async function geoSuccess(pos) {
@@ -113,14 +113,28 @@
 			localStorage.setItem('timestamp', pos.timestamp)
 		}
 
-		const urlHourly = weatherUrl(latitude, longitude, '/hourly')
-		const urlDaily = weatherUrl(latitude, longitude)
-		const [hourlyForecast, dailyForecast] = await Promise.all([
+		const urlHourly = weatherUrl(latitude, longitude, 'forecast/hourly')
+		const urlDaily = weatherUrl(latitude, longitude, 'forecast')
+		const urlCity =  weatherUrl(latitude, longitude)
+
+		let [hourlyForecast, dailyForecast, forecastLocation] = await Promise.all([
 			fetchForecastData(urlHourly),
-			fetchForecastData(urlDaily)
+			fetchForecastData(urlDaily),
+			fetchForecastData(urlCity)
 		])
 
-		let html = getWeekdayHtml(hourlyForecast[0].startTime, dailyForecast)
+		hourlyForecast = hourlyForecast.periods
+		dailyForecast = dailyForecast.periods
+		forecastLocation = forecastLocation.relativeLocation.properties
+
+		// Setup location header and first day
+		let html = `
+		<div class="cityHeader">
+			<div class="top">${forecastLocation.city}, ${forecastLocation.state}</div>
+			<div class="bottom">${hourlyForecast[0].temperature}&deg;</div>
+		</div>
+		`
+		html += getWeekdayHtml(hourlyForecast[0].startTime, dailyForecast)
 
 
 		for (const p of hourlyForecast) {
@@ -241,7 +255,7 @@
 	}
 
 	function weatherUrl(lat, lng, endpoint = '') {
-		return `https://api.weather.gov/points/${lat.toFixed(4)},${lng.toFixed(4)}/forecast${endpoint}`
+		return `https://api.weather.gov/points/${lat.toFixed(4)},${lng.toFixed(4)}/${endpoint}`
 	}
 </script>
 
