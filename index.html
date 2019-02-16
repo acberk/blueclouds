@@ -1,9 +1,304 @@
-<!DOCTYPE html><html>
+<!DOCTYPE html>
+<html>
 
 <head>
+	<style>
+		body {
+			font-size: 25px;
+			font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+			color: #4e4e4e;
+			margin: 0;
+			padding: 0;
+			width: 100%;
+		}
+
+		.cityHeader {
+			height: 75px;
+			display: flex;
+			align-items: center;
+			flex-direction: column;
+			justify-content: space-evenly;
+		}
+
+		.day {
+			font-size: 15px;
+		}
+
+		.month {
+			font-size: 20px;
+		}
+
+		.accordion {
+			outline: none;
+			padding: 1vh 0 1vh 0;
+			background-color: white;
+			display: flex;
+			flex-direction: row;
+			justify-content: space-evenly;
+			align-items: center;
+			flex-wrap: nowrap;
+			flex-grow: 1;
+		}
+
+		.accordion>span {
+			flex-grow: 1;
+		}
+
+		.accordion .dayDate {
+			display: flex;
+			flex-direction: row;
+			align-items: center;
+			flex-wrap: nowrap;
+			justify-content: space-between;
+			flex: 1;
+		}
+
+		.dayMonth {
+			width: 80px;
+		}
+
+		.rain {
+			text-align: right;
+			width: 100px;
+		}
+
+		#content {
+			position: absolute;
+			top: 0;
+			left: 0;
+			right: 0;
+		}
+
+		ul {
+			list-style: none;
+			margin: 0;
+			padding: 0;
+			overflow: hidden;
+			max-height: 0;
+			transition: max-height 0.4s ease-out;
+		}
+
+		img {
+			/* height: 7vh; */
+			border-radius: 6px;
+			margin-left: 1rem;
+		}
+
+		li {
+			padding: 1vh 0 1vh 0;
+			background-color: white;
+			display: flex;
+			flex-direction: row;
+			justify-content: space-evenly;
+			align-items: center;
+			flex-wrap: nowrap;
+			flex-grow: 1;
+		}
+
+		li.hourly:nth-child(2n) {
+			background-color: #eee;
+		}
+
+		li div.left-detail {
+			display: flex;
+			flex-direction: row;
+			align-items: center;
+			flex-wrap: nowrap;
+			justify-content: space-between;
+			flex: 1;
+		}
+
+		li div.right-detail {
+			display: flex;
+			flex-direction: row;
+			align-items: center;
+			flex-wrap: nowrap;
+			justify-content: center;
+			flex: 1.5;
+		}
+
+		li span {
+			text-align: right;
+		}
+
+		li span.temperature {
+			width: 75px;
+		}
+
+		li span.time {
+			font-size: 20px;
+			width: 70px;
+		}
+
+		.flex-pad {
+			flex-grow: 1;
+		}
+
+		.accordion .highLow {
+			display: inline-block;
+			font-size: 80%;
+			margin: 0 0.5em;
+		}
+
+		.sticky {
+			overflow: auto;
+			width: -webkit-fill-available;
+			width: -moz-available;
+			position: -webkit-sticky;
+			position: -moz-sticky;
+			position: -o-sticky;
+			position: -ms-sticky;
+			position: sticky;
+			top: 0;
+			left: 0;
+			right: 0;
+			display: flex;
+			align-items: center;
+			z-index: 1;
+			background-color: #fff;
+			padding-left: 1rem;
+			border-top: rgba(0, 0, 0, 0.07) 0.8px solid;
+			box-shadow: 0 2px 2px 0 rgba(0, 0, 0, .07);
+			cursor: pointer;
+			transition: 0.4s;
+			outline: none;
+		}
+
+		.sticky:active {
+			background-color: #eee;
+		}
+
+
+		.scroll {
+			opacity: 0.3;
+			background-color: #4e4e4e;
+			width: 40px;
+			height: 40px;
+			position: fixed;
+			bottom: 10px;
+			right: 10px;
+			border-radius: 50%;
+			border: none;
+			z-index: 10;
+			transition: opacity 1s;
+			outline: none;
+		}
+
+		.scroll:active {
+			opacity: 1;
+			transition: none;
+		}
+
+		.scroll.fade-out {
+			opacity: 0;
+		}
+
+		.chevron {
+			color: white;
+			border-style: solid;
+			border-width: 0.25em 0.25em 0 0;
+			content: '';
+			display: inline-block;
+			height: 0.45em;
+			transform: rotate(-45deg);
+			vertical-align: top;
+			width: 0.45em;
+			position: absolute;
+			top: 50%;
+			left: 50%;
+			margin-top: -5px;
+			margin-left: -4px;
+		}
+
+		/************* Media Queries *************/
+		@media (hover) {
+			.scroll:hover {
+				opacity: 1;
+			}
+
+			.sticky:hover {
+				background-color: #eee;
+			}
+		}
+
+		/*****************************************/
+
+
+
+		/************* Loading Bounce *************/
+		.spinner {
+			display: flex;
+			justify-content: center;
+			margin-top: 20vh;
+		}
+
+		.spinner>div {
+			width: 1.75vh;
+			height: 1.75vh;
+			background-color: #7e7e7e;
+			margin: 0 .25vw 0 .25vw;
+
+			border-radius: 100%;
+			display: inline-block;
+			-webkit-animation: sk-bouncedelay 1.4s infinite ease-in-out both;
+			animation: sk-bouncedelay 1.4s infinite ease-in-out both;
+		}
+
+		.spinner .bounce1 {
+			-webkit-animation-delay: -0.32s;
+			animation-delay: -0.32s;
+		}
+
+		.spinner .bounce2 {
+			-webkit-animation-delay: -0.16s;
+			animation-delay: -0.16s;
+		}
+
+		@-webkit-keyframes sk-bouncedelay {
+
+			0%,
+			80%,
+			100% {
+				-webkit-transform: scale(0)
+			}
+
+			40% {
+				-webkit-transform: scale(1.0)
+			}
+		}
+
+		@keyframes sk-bouncedelay {
+
+			0%,
+			80%,
+			100% {
+				-webkit-transform: scale(0);
+				transform: scale(0);
+			}
+
+			40% {
+				-webkit-transform: scale(1.0);
+				transform: scale(1.0);
+			}
+		}
+
+		/********************************************/
+
+		@keyframes expand {
+
+			/* 0%    { transform: scale(1, 0) }
+	100%  { transform: scale(1, 1) } */
+			0% {
+				max-height: 0;
+			}
+
+			100% {
+				max-height: 2200px;
+			}
+		}
+	</style>
 
 	<title>blueclouds</title>
-	<link rel="stylesheet" type="text/css" href="main.css">
 	<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
 
 	<link rel="apple-touch-icon-precomposed" sizes="57x57" href="images/apple-touch-icon-57x57.png" />
@@ -104,7 +399,7 @@
 	}
 
 	async function geoSuccess(pos) {
-		
+
 		const { latitude, longitude } = pos.coords
 
 		if (!(localStorage.getItem('lat') && localStorage.getItem('lon') && localStorage.getItem('timestamp'))) {
@@ -115,7 +410,7 @@
 
 		const urlHourly = weatherUrl(latitude, longitude, 'forecast/hourly')
 		const urlDaily = weatherUrl(latitude, longitude, 'forecast')
-		const urlCity =  weatherUrl(latitude, longitude)
+		const urlCity = weatherUrl(latitude, longitude)
 
 		let [hourlyForecast, dailyForecast, forecastLocation] = await Promise.all([
 			fetchForecastData(urlHourly),
@@ -167,9 +462,9 @@
 	function setupAccordionListener() {
 		const accordions = document.getElementsByClassName('accordion')
 
-		for(let i = 0; i < accordions.length; i++) {
+		for (let i = 0; i < accordions.length; i++) {
 			const accordion = accordions[i];
-			accordion.addEventListener('click', function(evt) {
+			accordion.addEventListener('click', function (evt) {
 				this.classList.toggle('open')
 				const collapsibleList = this.nextElementSibling
 
@@ -208,7 +503,7 @@
 		let precipitation = dailyVal.icon.match(/(,)\d+(?=[\?\/])/g)
 		let retVal
 		if (precipitation) {
-			precipitation = precipitation.map(x=>x.replace(',',''))
+			precipitation = precipitation.map(x => x.replace(',', ''))
 			retVal = Math.max(...precipitation)
 		}
 		return retVal
@@ -221,7 +516,7 @@
 		if (!daily.day && !daily.night) return false
 
 		const precipitation = getPrecipitation(daily)
-		
+
 
 		datetime = new Date(datetime)
 		const day = weekdays[datetime.getDay()]
@@ -232,20 +527,20 @@
 				</ul>
 			</div>
 			<div>
-					<div class="accordion sticky">
-						<div class="dayDate">
-							<div class="dayMonth">
-								<div class="day">${day}</div>
-								<div class="month">${month}/${date}</div>
-							</div>
-							${precipitation ? `<span class="rain">&#9748; ${precipitation}%</span>` : `<span class="flex-pad"></span>`}
-							<img src="${(daily.day || daily.night).icon.replace('medium', 'small')}" />
+				<div class="accordion sticky">
+					<div class="dayDate">
+						<div class="dayMonth">
+							<div class="day">${day}</div>
+							<div class="month">${month}/${date}</div>
 						</div>
-						<div class="highLow">
-							<div>${daily.day ? daily.day.temperature + '&deg;' : '\xa0'}</div>
-							<div>${daily.night ?  daily.night.temperature + '&deg;' : '\xa0'}</div>
-						</div>
+						${precipitation ? `<span class="rain">&#9748; ${precipitation}%</span>` : `<span class="flex-pad"></span>`}
+						<img src="${(daily.day || daily.night).icon.replace('medium', 'small')}" />
 					</div>
+					<div class="highLow">
+						<div>${daily.day ? daily.day.temperature + '&deg;' : '\xa0'}</div>
+						<div>${daily.night ? daily.night.temperature + '&deg;' : '\xa0'}</div>
+					</div>
+				</div>
 				<ul>
 		`
 	}
