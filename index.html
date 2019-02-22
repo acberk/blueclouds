@@ -388,6 +388,7 @@
 	scrollButton.addEventListener('click', animateScroll)
 	locationIcon.addEventListener('click', evt => {
 		contentContainer.innerHTML = firstPaintHtml;
+		localStorage.clear()
 		getDeviceLocation()
 	})
 
