@@ -11,7 +11,14 @@
 			padding: 0;
 			width: 100%;
 		}
-
+		#icon-location {
+			position: absolute;
+			top: 0;
+			right: 0;
+			padding: 10px 10px 0 0;
+			cursor: pointer;
+			z-index: 100;
+		}
 		.cityHeader {
 			height: 75px;
 			display: flex;
@@ -284,6 +291,24 @@
 
 		/********************************************/
 
+		/*****************SVG Icons******************/
+		.svg-icon {
+			width: 1em;
+			height: 1em;
+		}
+
+		.svg-icon path,
+		.svg-icon polygon,
+		.svg-icon rect {
+			fill: #4e4e4e;
+		}
+
+		.svg-icon circle {
+			stroke: #4e4e4e;
+			stroke-width: 1;
+		}
+		/********************************************/
+
 		@keyframes expand {
 
 			/* 0%    { transform: scale(1, 0) }
@@ -326,6 +351,11 @@
 </head>
 
 <body>
+	<div id="icon-location">
+		<svg class="svg-icon" viewBox="0 0 20 20">
+			<path d="M17.659,9.597h-1.224c-0.199-3.235-2.797-5.833-6.032-6.033V2.341c0-0.222-0.182-0.403-0.403-0.403S9.597,2.119,9.597,2.341v1.223c-3.235,0.2-5.833,2.798-6.033,6.033H2.341c-0.222,0-0.403,0.182-0.403,0.403s0.182,0.403,0.403,0.403h1.223c0.2,3.235,2.798,5.833,6.033,6.032v1.224c0,0.222,0.182,0.403,0.403,0.403s0.403-0.182,0.403-0.403v-1.224c3.235-0.199,5.833-2.797,6.032-6.032h1.224c0.222,0,0.403-0.182,0.403-0.403S17.881,9.597,17.659,9.597 M14.435,10.403h1.193c-0.198,2.791-2.434,5.026-5.225,5.225v-1.193c0-0.222-0.182-0.403-0.403-0.403s-0.403,0.182-0.403,0.403v1.193c-2.792-0.198-5.027-2.434-5.224-5.225h1.193c0.222,0,0.403-0.182,0.403-0.403S5.787,9.597,5.565,9.597H4.373C4.57,6.805,6.805,4.57,9.597,4.373v1.193c0,0.222,0.182,0.403,0.403,0.403s0.403-0.182,0.403-0.403V4.373c2.791,0.197,5.026,2.433,5.225,5.224h-1.193c-0.222,0-0.403,0.182-0.403,0.403S14.213,10.403,14.435,10.403"></path>
+		</svg>
+	</div>
 	<div id="content">
 		<div class="spinner">
 			<div class="bounce1"></div>
@@ -340,18 +370,35 @@
 	</button>
 </body>
 <script>
-	const scrollButton = document.getElementById('scroll-top')
 
-	scrollButton.addEventListener('click', animateScroll)
+	const firstPaintHtml = `
+		<div class="spinner">
+			<div class="bounce1"></div>
+			<div class="bounce2"></div>
+			<div class="bounce3"></div>
+		</div>
+		<ul id="hourlyList">
+		</ul>
+	`
 
 	const contentContainer = document.getElementById('content')
+	const scrollButton = document.getElementById('scroll-top')
+	const locationIcon = document.getElementById('icon-location')
+
+	scrollButton.addEventListener('click', animateScroll)
+	locationIcon.addEventListener('click', evt => {
+		contentContainer.innerHTML = firstPaintHtml;
+		getDeviceLocation()
+	})
+
 
 	const lat = localStorage.getItem('lat')
 	const lon = localStorage.getItem('lon')
 	const stamp = localStorage.getItem('timestamp')
 
 	/* Reuse location for 10 minutes */
-	if (lat && lon && stamp && (Date.now() - stamp) < 600000) {
+	// if (lat && lon && stamp && (Date.now() - stamp) < 600000) {
+	if (lat && lon && stamp) {
 		const geo = {
 			coords: {
 				latitude: +lat,
@@ -364,11 +411,7 @@
 	}
 	else {
 		localStorage.clear()
-		navigator.geolocation.getCurrentPosition(geoSuccess, err => {
-			if (err) {
-				document.write(err.message)
-			}
-		})
+		getDeviceLocation()
 	}
 
 	window.addEventListener('scroll', evt => {
@@ -380,6 +423,14 @@
 		document.write(evt.promise);
 		document.write(evt.reason);
 	});
+
+	function getDeviceLocation() {
+		navigator.geolocation.getCurrentPosition(geoSuccess, err => {
+			if (err) {
+				document.write(err.message)
+			}
+		})
+	}
 
 	function animateScroll() {
 		const scrollTime = Math.min(2.0, Math.max(0.5, window.pageYOffset / 3000))
