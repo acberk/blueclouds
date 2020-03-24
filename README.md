@@ -4,4 +4,4 @@
 
 A simple hourly weather forecast
 
-blueclouds.netlify.com
+[blueclouds.netlify.com](https://blueclouds.netlify.com)
