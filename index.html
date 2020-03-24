@@ -11,6 +11,7 @@
 			padding: 0;
 			width: 100%;
 		}
+
 		.cityHeader {
 			height: 75px;
 			display: flex;
@@ -228,7 +229,7 @@
 
 
 		/************* Loading Bounce *************/
-		.spinner {
+		.spinner-center {
 			display: flex;
 			justify-content: center;
 			margin-top: 20vh;
@@ -291,6 +292,7 @@
 			width: 1.2em;
 			height: 1.2em;
 		}
+
 		.svg-icon path,
 		.svg-icon polygon,
 		.svg-icon rect {
@@ -301,10 +303,12 @@
 			stroke: #359add;
 			stroke-width: 1;
 		}
+
 		.svg-icon-location {
 			width: 1.2em;
 			height: 1.2em;
 		}
+
 		/* Location Icon */
 		.svg-icon-location path,
 		.svg-icon-location polygon,
@@ -315,17 +319,25 @@
 		.svg-icon-location circle {
 			stroke: #4e4e4e;
 			stroke-width: 1;
+			width: 1.2em;
+			height: 1.2em;
+			padding: 10px;
+			cursor: pointer;
 		}
+
 		#icon-location {
 			position: absolute;
 			top: 14px;
 			right: 17px;
-			cursor: pointer;
 			z-index: 100;
-			width: 1.2em;
-			height: 1.2em;
-			padding: 10px;
+			display: flex;
+			flex-direction: row;
 		}
+
+		#loading {
+			margin-right: 10px;
+		}
+
 		/********************************************/
 
 		@keyframes expand {
@@ -370,15 +382,20 @@
 </head>
 
 <body>
-	<svg id="icon-location" class="svg-icon-location" viewBox="0 0 20 20">
-		<path d="M17.659,9.597h-1.224c-0.199-3.235-2.797-5.833-6.032-6.033V2.341c0-0.222-0.182-0.403-0.403-0.403S9.597,2.119,9.597,2.341v1.223c-3.235,0.2-5.833,2.798-6.033,6.033H2.341c-0.222,0-0.403,0.182-0.403,0.403s0.182,0.403,0.403,0.403h1.223c0.2,3.235,2.798,5.833,6.033,6.032v1.224c0,0.222,0.182,0.403,0.403,0.403s0.403-0.182,0.403-0.403v-1.224c3.235-0.199,5.833-2.797,6.032-6.032h1.224c0.222,0,0.403-0.182,0.403-0.403S17.881,9.597,17.659,9.597 M14.435,10.403h1.193c-0.198,2.791-2.434,5.026-5.225,5.225v-1.193c0-0.222-0.182-0.403-0.403-0.403s-0.403,0.182-0.403,0.403v1.193c-2.792-0.198-5.027-2.434-5.224-5.225h1.193c0.222,0,0.403-0.182,0.403-0.403S5.787,9.597,5.565,9.597H4.373C4.57,6.805,6.805,4.57,9.597,4.373v1.193c0,0.222,0.182,0.403,0.403,0.403s0.403-0.182,0.403-0.403V4.373c2.791,0.197,5.026,2.433,5.225,5.224h-1.193c-0.222,0-0.403,0.182-0.403,0.403S14.213,10.403,14.435,10.403"></path>
-	</svg>
-	<div id="content">
-		<div class="spinner">
+
+	<div id="icon-location">
+		<div id="loading" class="spinner">
 			<div class="bounce1"></div>
 			<div class="bounce2"></div>
 			<div class="bounce3"></div>
 		</div>
+		<svg class="svg-icon-location" viewBox="0 0 20 20">
+			<path
+				d="M17.659,9.597h-1.224c-0.199-3.235-2.797-5.833-6.032-6.033V2.341c0-0.222-0.182-0.403-0.403-0.403S9.597,2.119,9.597,2.341v1.223c-3.235,0.2-5.833,2.798-6.033,6.033H2.341c-0.222,0-0.403,0.182-0.403,0.403s0.182,0.403,0.403,0.403h1.223c0.2,3.235,2.798,5.833,6.033,6.032v1.224c0,0.222,0.182,0.403,0.403,0.403s0.403-0.182,0.403-0.403v-1.224c3.235-0.199,5.833-2.797,6.032-6.032h1.224c0.222,0,0.403-0.182,0.403-0.403S17.881,9.597,17.659,9.597 M14.435,10.403h1.193c-0.198,2.791-2.434,5.026-5.225,5.225v-1.193c0-0.222-0.182-0.403-0.403-0.403s-0.403,0.182-0.403,0.403v1.193c-2.792-0.198-5.027-2.434-5.224-5.225h1.193c0.222,0,0.403-0.182,0.403-0.403S5.787,9.597,5.565,9.597H4.373C4.57,6.805,6.805,4.57,9.597,4.373v1.193c0,0.222,0.182,0.403,0.403,0.403s0.403-0.182,0.403-0.403V4.373c2.791,0.197,5.026,2.433,5.225,5.224h-1.193c-0.222,0-0.403,0.182-0.403,0.403S14.213,10.403,14.435,10.403">
+			</path>
+		</svg>
+	</div>
+	<div id="content">
 		<ul id="hourlyList">
 		</ul>
 	</div>
@@ -470,13 +487,29 @@
 		</ul>
 	`
 
+	const loadingHtml = `
+		<div id="loading" class="spinner">
+			<div class="bounce1"></div>
+			<div class="bounce2"></div>
+			<div class="bounce3"></div>
+		</div>
+	`
+	const locationHtml = `
+		<svg class="svg-icon-location" viewBox="0 0 20 20">
+			<path
+				d="M17.659,9.597h-1.224c-0.199-3.235-2.797-5.833-6.032-6.033V2.341c0-0.222-0.182-0.403-0.403-0.403S9.597,2.119,9.597,2.341v1.223c-3.235,0.2-5.833,2.798-6.033,6.033H2.341c-0.222,0-0.403,0.182-0.403,0.403s0.182,0.403,0.403,0.403h1.223c0.2,3.235,2.798,5.833,6.033,6.032v1.224c0,0.222,0.182,0.403,0.403,0.403s0.403-0.182,0.403-0.403v-1.224c3.235-0.199,5.833-2.797,6.032-6.032h1.224c0.222,0,0.403-0.182,0.403-0.403S17.881,9.597,17.659,9.597 M14.435,10.403h1.193c-0.198,2.791-2.434,5.026-5.225,5.225v-1.193c0-0.222-0.182-0.403-0.403-0.403s-0.403,0.182-0.403,0.403v1.193c-2.792-0.198-5.027-2.434-5.224-5.225h1.193c0.222,0,0.403-0.182,0.403-0.403S5.787,9.597,5.565,9.597H4.373C4.57,6.805,6.805,4.57,9.597,4.373v1.193c0,0.222,0.182,0.403,0.403,0.403s0.403-0.182,0.403-0.403V4.373c2.791,0.197,5.026,2.433,5.225,5.224h-1.193c-0.222,0-0.403,0.182-0.403,0.403S14.213,10.403,14.435,10.403">
+			</path>
+		</svg>
+	`
+
 	const contentContainer = document.getElementById('content')
+	const loadingContainer = document.getElementById('loading')
 	const scrollButton = document.getElementById('scroll-top')
 	const locationIcon = document.getElementById('icon-location')
 
 	scrollButton.addEventListener('click', animateScroll)
 	locationIcon.addEventListener('click', evt => {
-		contentContainer.innerHTML = firstPaintHtml;
+		showLoading(true);
 		localStorage.clear()
 		getDeviceLocation()
 	})
@@ -510,16 +543,21 @@
 	})
 
 	window.addEventListener('unhandledrejection', evt => {
-		document.write(evt.promise);
-		document.write(evt.reason);
+		alert(`${evt.promise}\n${evt.reason}`);
+		showLoading(false);
 	});
 
 	function getDeviceLocation() {
 		navigator.geolocation.getCurrentPosition(geoSuccess, err => {
 			if (err) {
-				document.write(err.message)
+				alert('test ' +err.message)
+				showLoading(false);
 			}
 		})
+	}
+
+	function showLoading(isLoading) {
+		locationIcon.innerHTML = (isLoading ? loadingHtml : '') + locationHtml
 	}
 
 	function animateScroll() {
@@ -596,6 +634,7 @@
 		}
 
 		contentContainer.innerHTML = html
+		showLoading(false);
 
 		setupAccordionListener()
 	}
